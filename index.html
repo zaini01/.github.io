@@ -10,33 +10,22 @@
   <body>
     <h1 style="width:500px;margin: 0 auto;text-align: center;">Session Iframe</h1>
     <script type="text/javascript">
-      const allowedOrigins = [
-        'http://localhost:3000/'
-      ];
+      const domains = [
+                        "https://www.domain1.com",
+                        "https://www.domaine2.com"
+                      ]
+      window.addEventListener("message", messageHandler, false);
+      function messageHandler(event) {
+                if (!domains.includes(event.origin)) return;
+                  
+                const { action, key, value } = event.data
 
-      window.onmessage = (e) => {
-        if (!allowedOrigins.includes(e.origin)) {
-            return;
-        }
-        const payload = JSON.parse(e.data);
-        switch(payload.method) {
-          case 'set':
-            localStorage.setItem(payload.key, JSON.stringify(payload.data));
-            break;
-          case 'get':
-            const parent = window.parent;
-            const data = localStorage.getItem(payload.key);
-            const returnPayload = {
-              method: 'storage#get',
-              data: data
-            }
-            parent.postMessage(JSON.stringify(returnPayload), '*');
-            break;
-          case 'remove':
-            localStorage.removeItem(payload.key);
-            break;
-        }
-      };
+                if (action == 'save'){
+                  window.localStorage.setItem(key, JSON.stringify(value))
+                } else if (action == 'get') {
+                  event.source.postMessage({action: 'returnData'}, key, JSON.parse(window.localStorage.getItem(key)), '*')
+                }
+      }
     </script>
   </body>
 </html>
