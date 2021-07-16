@@ -22,13 +22,7 @@
                 case 'remove':
                     localStorage.removeItem(payload.key);
                     break;
-            }
-
-            localStorage.setItem('task',e.data);
- 
-            var data = localStorage.getItem('task');
-
-            window.parent.postMessage(data, '*');  
+            } 
         }, false);
     </script>
 </body>
