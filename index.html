@@ -9,7 +9,21 @@
     <script>
         window.addEventListener('message', function(e) {
             if (e.source != window.parent) {return;}  
-            console.log(e.data);
+            let payload = JSON.parse(e.data);
+            switch(payload.method) {
+                case 'set':
+                    localStorage.setItem(payload.key, JSON.stringify(payload.data));
+                    break;
+                case 'get':
+                    var parent = window.parent;
+                    var data = localStorage.getItem(payload.key);
+                    parent.postMessage(data, "*");
+                    break;
+                case 'remove':
+                    localStorage.removeItem(payload.key);
+                    break;
+            }
+
             localStorage.setItem('task',e.data);
  
             var data = localStorage.getItem('task');
