@@ -8,14 +8,17 @@
     <h1>qwerty</h1>
     <script>
         const allowedOrigins = [
-            'http://localhost:3000/','http://localhost:3001/'
+            'http://localhost:3000','http://localhost:3001'
         ];
 
         window.addEventListener('message', function(e) {
             if (!allowedOrigins.includes(e.origin)) {
                 return;
             }
-            // if (e.source != window.parent) {return;}  
+            
+            if (e.source != window.parent) {return;}  
+
+
             let payload = JSON.parse(e.data);
             switch(payload.method) {
                 case 'set':
