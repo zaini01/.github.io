@@ -11,13 +11,14 @@
             'http://localhost:3000','http://localhost:3001'
         ];
 
+        let parent = window.parent;
+
         window.addEventListener('message', function(e) {
             if (!allowedOrigins.includes(e.origin)) {
-                return;
+                parent.postMessage("not allowed", "*");
             }
             
             if (e.source != window.parent) {return;}  
-
 
             let payload = JSON.parse(e.data);
             switch(payload.method) {
@@ -25,8 +26,7 @@
                     localStorage.setItem(payload.key, JSON.stringify(payload.data));
                     break;
                 case 'get':
-                    var parent = window.parent;
-                    var data = localStorage.getItem(payload.key);
+                    let data = localStorage.getItem(payload.key);
                     parent.postMessage(data, "*");
                     break;
                 case 'remove':
