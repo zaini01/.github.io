@@ -16,6 +16,7 @@
         window.addEventListener('message', function(e) {
             if (!allowedOrigins.includes(e.origin)) {
                 parent.postMessage("not allowed", "*");
+                return;
             }
             
             if (e.source != window.parent) {return;}  
