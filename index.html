@@ -1,30 +1,19 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#222531">
-  </head>
-
-  <body>
-    <h1 style="width:500px;margin: 0 auto;text-align: center;">Session Iframe</h1>
-    <script type="text/javascript">
-      const domains = [
-                        "http://localhost:3000/",
-                      ]
-      window.addEventListener("message", messageHandler, false);
-      function messageHandler(event) {
-                if (!domains.includes(event.origin)) return;
-                  
-                const { action, key, value } = event.data
-
-                if (action == 'save'){
-                  window.localStorage.setItem(key, JSON.stringify(value))
-                } else if (action == 'get') {
-                  event.source.postMessage({action: 'returnData'}, key, JSON.parse(window.localStorage.getItem(key)), '*')
-                }
-      }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>getmessage</title>
+</head>
+<body>
+    <h1>iframe</h1>
+    <script>
+        window.addEventListener('message', function(e) {
+            if (e.source != window.parent) {return;}  
+            console.log(e.data);
+            localStorage.setItem('task',e.data);
+ 
+            window.parent.postMessage('finished', '*');  
+        }, false);
     </script>
-  </body>
+</body>
 </html>
